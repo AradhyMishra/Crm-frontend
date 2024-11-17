@@ -20,7 +20,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
   
-  const getUser = async () => {
+  /* const getUser = async () => {
     try {
       setLoading(true); // Start loading
       const url = 'http://localhost:8080/auth/login/success';
@@ -32,7 +32,7 @@ function App() {
     } finally {
       setLoading(false); // Stop loading
     }
-  };
+  }; */
 
   const handleLogout = async () => {
     try {
@@ -47,9 +47,9 @@ function App() {
     getUser();
   }, []); */
 
-  if (loading) {
+  /* if (loading) {
     return <div className="loader">Loading...</div>; // Display loading indicator while fetching user
-  }
+  } */
 
   return (
     <div className="container mt-2">
@@ -61,7 +61,7 @@ function App() {
         
       />
         <Routes>
-          <Route path="/" element={<Home user={user} onLogout={handleLogout} /> } />
+          <Route path="/" element={<Home /* user={user} */  onLogout={handleLogout}  /> } />
           {/* <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
           <Route path="/signup" element={user ? <Navigate to="/" /> : <Signup />} /> */}
           <Route path="/create-segment" element={<CreateSegment setProgress = {setProgress} /> }/>
