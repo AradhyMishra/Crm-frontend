@@ -43,9 +43,9 @@ function App() {
     }
   };
 
-  useEffect(() => {
+  /* useEffect(() => {
     getUser();
-  }, []);
+  }, []); */
 
   if (loading) {
     return <div className="loader">Loading...</div>; // Display loading indicator while fetching user
@@ -61,16 +61,16 @@ function App() {
         
       />
         <Routes>
-          <Route path="/" element={user ? <Home user={user} onLogout={handleLogout} /> : <Login />} />
-          <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
-          <Route path="/signup" element={user ? <Navigate to="/" /> : <Signup />} />
-          <Route path="/create-segment" element={user ? <CreateSegment setProgress = {setProgress} /> : <Navigate to="/login" />} />
-          <Route path="/past-campaigns" element={user ? <PastCampaigns setProgress = {setProgress}/> : <Navigate to="/login" />} />
-          <Route path="/view-segments" element={user ? <PrevSegments setProgress = {setProgress}/> : <Navigate to="/login" />} />
-          <Route path="/create-customers" element={user ? <Customer setProgress = {setProgress} /> : <Navigate to="/login" />} />
-          <Route path="/orders" element={user ? <Order setProgress = {setProgress}/> : <Navigate to="/login" />} />
-          <Route path="/create-segments" element={user ? <CreateSegment setProgress = {setProgress}/> : <Navigate to="/login" />} />
-          <Route path="/view-customers" element={user ? <ViewCustomers setProgress = {setProgress}/> : <Navigate to="/login" />} />
+          <Route path="/" element={<Home user={user} onLogout={handleLogout} /> } />
+          {/* <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
+          <Route path="/signup" element={user ? <Navigate to="/" /> : <Signup />} /> */}
+          <Route path="/create-segment" element={<CreateSegment setProgress = {setProgress} /> }/>
+          <Route path="/past-campaigns" element={<PastCampaigns setProgress = {setProgress}/>} />
+          <Route path="/view-segments" element={<PrevSegments setProgress = {setProgress}/>} />
+          <Route path="/create-customers" element={<Customer setProgress = {setProgress} /> } />
+          <Route path="/orders" element={<Order setProgress = {setProgress}/>} />
+          <Route path="/create-segments" element={<CreateSegment setProgress = {setProgress}/> } />
+          <Route path="/view-customers" element={<ViewCustomers setProgress = {setProgress}/>} />
         </Routes>
       </Router>
     </div>
