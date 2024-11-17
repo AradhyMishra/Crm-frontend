@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import axios from "axios";
 import styles from "../Styles/Customer.module.css"; // Import the CSS module
 
 const Customer = (props) => {
@@ -25,38 +24,26 @@ const Customer = (props) => {
   };
 
   // Handle form submission
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setProgress(20);
 
+    // Frontend validation
     if (!customerData.name.trim() || !customerData.email.trim()) {
       setError("Name and Email are required.");
       return;
     }
     setProgress(40);
 
-    try {
-      const response = await axios.post("http://localhost:8080/api/customer", customerData);
-
-      if (response.status === 200) {
-        setSuccessMessage("Customer added successfully!");
-        setCustomerData({
-          name: "",
-          age: "",
-          email: "",
-          visits: "",
-          netSpend: "",
-        });
-        setProgress(70);
-      }
-    } catch (err) {
-      if (err.response && err.response.status === 400) {
-        setError(err.response.data.message || "Error adding customer.");
-      } else {
-        setError("An unexpected error occurred. Please try again.");
-      }
-      setProgress(70);
-    }
+    // Simulate adding a customer
+    setSuccessMessage(`Customer "${customerData.name}" added successfully!`);
+    setCustomerData({
+      name: "",
+      age: "",
+      email: "",
+      visits: "",
+      netSpend: "",
+    });
     setProgress(100);
   };
 

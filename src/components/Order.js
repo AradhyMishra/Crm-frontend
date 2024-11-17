@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import axios from "axios";
 
 const OrderIngestion = (props) => {
   const [orderData, setOrderData] = useState({
@@ -19,42 +18,53 @@ const OrderIngestion = (props) => {
   };
 
   // Handle form submission
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setProgress(20);
+
     if (!orderData.customerId.trim() || !orderData.amount.trim()) {
       setError("Customer ID and Order Amount are required.");
       return;
     }
     setProgress(40);
+
     if (isNaN(orderData.amount) || Number(orderData.amount) <= 0) {
       setError("Order Amount must be a valid positive number.");
       return;
     }
 
-    try {
-      const response = await axios.post("http://localhost:8080/api/order", orderData);
+    // Simulate API call and success
+    setTimeout(() => {
       setProgress(60);
-      if (response.status === 200) {
-        setSuccessMessage(
-          "Order processed successfully! Order details have been sent to our processing system."
-        );
-        setOrderData({
-          customerId: "",
-          amount: "",
-        });
-      }
-    } catch (err) {
-      if (err.response && err.response.status === 400) {
-        setError(
-          err.response.data ||
-            "The provided Customer ID is invalid. Please check and try again."
-        );
-      } else {
-        setError("Please Make sure the Customer Id is valid.");
-      }
-    }
-    setProgress(100);
+      setSuccessMessage(
+        `Order for Customer ID "${orderData.customerId}" of amount ${orderData.amount} added successfully!`
+      );
+      setOrderData({
+        customerId: "",
+        amount: "",
+      });
+      setProgress(100);
+    }, 500);
+
+    // Uncomment and replace with real API call if needed
+    // try {
+    //   const response = await axios.post("http://localhost:8080/api/order", orderData);
+    //   setProgress(60);
+    //   if (response.status === 200) {
+    //     setSuccessMessage("Order processed successfully!");
+    //     setOrderData({
+    //       customerId: "",
+    //       amount: "",
+    //     });
+    //   }
+    // } catch (err) {
+    //   if (err.response && err.response.status === 400) {
+    //     setError("The provided Customer ID is invalid. Please check and try again.");
+    //   } else {
+    //     setError("Please Make sure the Customer Id is valid.");
+    //   }
+    // }
+    // setProgress(100);
   };
 
   // Styles

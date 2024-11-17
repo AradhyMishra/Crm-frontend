@@ -32,18 +32,18 @@ const Navbar = (props) => {
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav me-auto">
                         <li className="nav-item">
-                            <a className="nav-link active" style = {{display: props.user === null?'none':''}} aria-current="page" href="/">Home</a>
+                            <a className="nav-link active" /* style = {{display: props.user === null?'none':''}}  */aria-current="page" href="/">Home</a>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link active" style = {{display: props.user === null?'none':''}} aria-current="page" to="/view-customers">Customers</Link>
+                            <Link className="nav-link active" /* style = {{display: props.user === null?'none':''}} */ aria-current="page" to="/view-customers">Customers</Link>
                         </li>
-                        <li className="nav-item" style = {{display: props.user === null?'none':''}}>
+                        <li className="nav-item" /* style = {{display: props.user === null?'none':''}} */>
                             <Link className="nav-link active" aria-current="page" to="/view-segments">Segments</Link>
                         </li>
                     </ul>
-                    <button type="button" onClick={logout} className="btn btn-secondary mx-3">
+                    {/* <button type="button" onClick={logout} className="btn btn-secondary mx-3">
                         Logout
-                    </button>
+                    </button> */}
 
                 </div>
             </nav>

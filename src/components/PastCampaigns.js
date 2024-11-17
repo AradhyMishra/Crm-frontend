@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import axios from "axios";
 import styles from "../Styles/PastCampaigns.module.css"; // Import the CSS module
 
 export const PastCampaigns = (props) => {
   const { setProgress } = props;
   const { state } = useLocation();
   const segmentId = state?.segmentId;
+
   const [customers, setCustomers] = useState([]);
   const [campaignsData, setCampaignsData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -23,45 +23,57 @@ export const PastCampaigns = (props) => {
   useEffect(() => {
     const fetchSegmentData = async () => {
       setProgress(20);
+
       try {
         if (!segmentId) return;
 
-        const customersResponse = await axios.get(
-          `http://localhost:8080/api/getSegmentCustomers/${segmentId}`
-        );
-        const customerList = customersResponse.data.customers || [];
-        setCustomers(customerList);
-        setProgress(40);
+        // Dummy Data
+        const dummyCustomers = [
+          { _id: "1", name: "Alice", email: "alice@example.com" },
+          { _id: "2", name: "Bob", email: "bob@example.com" },
+          { _id: "3", name: "Charlie", email: "charlie@example.com" },
+        ];
 
-        const audienceSize = customerList.length;
-        const customerIds = customerList.map((customer) => customer._id);
+        const dummyCampaigns = [
+          {
+            customerId: { _id: "1" },
+            message: "Hello Alice, check out our latest offers!",
+            status: "SENT",
+            sentAt: "2024-11-17T12:00:00Z",
+          },
+          {
+            customerId: { _id: "2" },
+            message: "Hello Bob, don’t miss our discounts!",
+            status: "FAILED",
+            sentAt: "2024-11-16T10:00:00Z",
+          },
+          {
+            customerId: { _id: "3" },
+            message: "Hi Charlie, enjoy 20% off on your next purchase!",
+            status: "SENT",
+            sentAt: "2024-11-15T08:30:00Z",
+          },
+        ];
 
-        if (customerIds.length > 0) {
-          const campaignsResponse = await axios.post(
-            "http://localhost:8080/api/getCampaignsForCustomers",
-            { customerIds }
-          );
+        setCustomers(dummyCustomers);
+        setCampaignsData(dummyCampaigns);
 
-          const sortedCampaigns = campaignsResponse.data.campaigns.sort(
-            (a, b) => new Date(b.sentAt) - new Date(a.sentAt)
-          );
-          setCampaignsData(sortedCampaigns || []);
+        // Dummy statistics
+        const audienceSize = dummyCustomers.length;
+        const messagesSent = dummyCampaigns.filter((c) => c.status === "SENT").length;
+        const messagesFailed = dummyCampaigns.filter((c) => c.status === "FAILED").length;
+        const totalMessages = messagesSent + messagesFailed;
+        const successRate = ((messagesSent / totalMessages) * 100).toFixed(2);
+        const failureRate = ((messagesFailed / totalMessages) * 100).toFixed(2);
 
-          const messagesSent = sortedCampaigns.filter((c) => c.status === "SENT").length;
-          const messagesFailed = sortedCampaigns.filter((c) => c.status === "FAILED").length;
-          const totalMessages = messagesSent + messagesFailed;
-          const successRate = ((messagesSent / totalMessages) * 100).toFixed(2);
-          const failureRate = ((messagesFailed / totalMessages) * 100).toFixed(2);
-
-          setStatistics({
-            audienceSize,
-            messagesSent,
-            messagesFailed,
-            totalMessages,
-            successRate,
-            failureRate,
-          });
-        }
+        setStatistics({
+          audienceSize,
+          messagesSent,
+          messagesFailed,
+          totalMessages,
+          successRate,
+          failureRate,
+        });
       } catch (error) {
         console.error("Error fetching segment or campaigns:", error);
       } finally {
@@ -101,6 +113,7 @@ export const PastCampaigns = (props) => {
     return <p>No segment selected. Please go back and select a segment.</p>;
   }
 
+  // Group campaigns by customer
   const groupedCampaigns = customers.map((customer) => {
     const customerCampaigns = campaignsData.filter(
       (campaign) => campaign.customerId?._id === customer._id
@@ -119,16 +132,28 @@ export const PastCampaigns = (props) => {
           <h5 className={styles.statsHeader}>Statistics</h5>
           <div className={styles.statsRow}>
             <div className={styles.statsItem}>
-              <p><strong>Audience Size:</strong> {statistics.audienceSize}</p>
-              <p><strong>Total Messages:</strong> {statistics.totalMessages}</p>
+              <p>
+                <strong>Audience Size:</strong> {statistics.audienceSize}
+              </p>
+              <p>
+                <strong>Total Messages:</strong> {statistics.totalMessages}
+              </p>
             </div>
             <div className={styles.statsItem}>
-              <p><strong>Messages Sent:</strong> {statistics.messagesSent}</p>
-              <p><strong>Messages Failed:</strong> {statistics.messagesFailed}</p>
+              <p>
+                <strong>Messages Sent:</strong> {statistics.messagesSent}
+              </p>
+              <p>
+                <strong>Messages Failed:</strong> {statistics.messagesFailed}
+              </p>
             </div>
             <div className={styles.statsItem}>
-              <p><strong>Success Rate:</strong> {statistics.successRate}%</p>
-              <p><strong>Failure Rate:</strong> {statistics.failureRate}%</p>
+              <p>
+                <strong>Success Rate:</strong> {statistics.successRate}%
+              </p>
+              <p>
+                <strong>Failure Rate:</strong> {statistics.failureRate}%
+              </p>
             </div>
           </div>
         </div>

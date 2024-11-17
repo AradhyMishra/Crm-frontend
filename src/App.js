@@ -54,7 +54,7 @@ function App() {
   return (
     <div className="container mt-2">
       <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-      <Navbar user = {user}/>
+      <Navbar /* user = {user} *//>
       <LoadingBar
         color='#f11946'
         progress={progress}

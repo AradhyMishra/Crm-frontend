@@ -1,50 +1,37 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from "react";
 import styles from "../Styles/ViewCustomers.module.css"; // Import the CSS module
 
 const ViewCustomers = (props) => {
   const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
   const { setProgress } = props;
 
   useEffect(() => {
     setProgress(20);
-    const fetchCustomers = async () => {
-      try {
-        const response = await axios.get("http://localhost:8080/api/fetchCustomers");
-        setCustomers(response.data.customers || []);
-      } catch (error) {
-        setError("Error fetching customer data");
-        console.error("Error:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    setProgress(60);
-    fetchCustomers();
+
+    // Dummy data for customers
+    const dummyCustomers = [
+      { _id: "1", name: "Alice", email: "alice@example.com", age: 25, visits: 10, totalSpend: 500, joinDate: "2024-01-01" },
+      { _id: "2", name: "Bob", email: "bob@example.com", age: 30, visits: 5, totalSpend: 200, joinDate: "2024-02-01" },
+      { _id: "3", name: "Charlie", email: "charlie@example.com", age: 28, visits: 8, totalSpend: 300, joinDate: "2024-03-01" },
+      { _id: "4", name: "David", email: "david@example.com", age: 35, visits: 15, totalSpend: 800, joinDate: "2024-04-01" },
+      { _id: "5", name: "Eve", email: "eve@example.com", age: 22, visits: 12, totalSpend: 600, joinDate: "2024-05-01" },
+      { _id: "6", name: "Frank", email: "frank@example.com", age: 40, visits: 20, totalSpend: 1000, joinDate: "2024-06-01" },
+      { _id: "7", name: "Grace", email: "grace@example.com", age: 27, visits: 6, totalSpend: 350, joinDate: "2024-07-01" },
+      { _id: "8", name: "Hannah", email: "hannah@example.com", age: 29, visits: 9, totalSpend: 450, joinDate: "2024-08-01" },
+    ];
+
+    setCustomers(dummyCustomers);
+    setLoading(false);
     setProgress(100);
-    // eslint-disable-next-line
-  }, []);
+  }, [setProgress]);
 
-  const handleDeleteCustomer = async (customerId) => {
-    try {
-      const response = await axios.delete("http://localhost:8080/api/deleteCustomer", {
-        data: { customerId },
-      });
-
-      setMessage(response.data.message || "Customer deleted successfully!");
-      setMessageType("success");
-
-      // Update the customers list after deletion
-      setCustomers(customers.filter((customer) => customer._id !== customerId));
-    } catch (error) {
-      console.error("Error deleting customer:", error);
-      setMessage("Error deleting customer");
-      setMessageType("error");
-    }
+  const handleDeleteCustomer = (customerId) => {
+    setCustomers(customers.filter((customer) => customer._id !== customerId));
+    setMessage("Customer deleted successfully!");
+    setMessageType("success");
   };
 
   return (
@@ -64,10 +51,6 @@ const ViewCustomers = (props) => {
       {loading ? (
         <div className={styles["loading-text"]}>
           <p>Loading...</p>
-        </div>
-      ) : error ? (
-        <div className={`${styles.alert} ${styles["alert-danger"]}`} role="alert">
-          {error}
         </div>
       ) : customers.length === 0 ? (
         <div className={`${styles.alert} ${styles["alert-info"]}`} role="alert">
@@ -98,6 +81,7 @@ const ViewCustomers = (props) => {
                 <td>
                   <i
                     className="fas fa-trash"
+                    style={{ cursor: "pointer", color: "red" }}
                     onClick={() => handleDeleteCustomer(customer._id)}
                     title="Delete Customer"
                   ></i>
